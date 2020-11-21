@@ -1,4 +1,5 @@
 *.txt
 *.java
 *.py
+*.exe
 vigenereR.cpp
