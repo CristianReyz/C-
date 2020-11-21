@@ -3,8 +3,7 @@
 #include<iostream>
 #include<string.h>
 using namespace std;
-char diccionario[]={'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
-
+char diccionario[]={'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',' '};
 
 void cifrado_vigenere (){
 	int aux1,aux2,aux3;
@@ -19,7 +18,6 @@ void cifrado_vigenere (){
 	//ci  = mi  + ki (mod 26), 0 = ci  = 25;
 	int k=0;
 	for(int i=0; i<strlen(mensaje);i++){
-		if(mensaje[i]!= 26){
 			for(int j=0;j<strlen(diccionario);j++){
 				if(mensaje[i]==diccionario[j]){
 					 aux1=j;
@@ -30,46 +28,48 @@ void cifrado_vigenere (){
 			}
 			aux3=(aux1+aux2)%26;
 			mensaje[i]=diccionario[aux3];
-			k++;	
-		}				
+			k++;					
 	}
 	cout<<"El mensaje cifrado es:"<<mensaje<<endl<<endl;
 }
 
 void descifrado_vigenere(){
-	int aux1,aux2,aux3;
+	int aux1, aux2, aux3;
 	char mensaje[100];
 	char clave[10];
 	fflush(stdin);
-	cout<<"Ingrese mensaje a descifrar:";
+	cout<<"Ingrese mensaje a descifrar: ";
 	cin.getline(mensaje,100);
 	fflush(stdin);
-	cout<<"Ingrese clave:";
+	cout<<"Ingrese clave: ";
 	cin.getline(clave,100);
 	//Usar mi  = ci  - ki (mod 26), 0 = mi  = 25;
 
-	int k=0;
-	for(int i=0; i<strlen(mensaje);i++){
-		if(mensaje[i]!= 26){
-			for(int j=0;j<strlen(diccionario);j++){
-				if(mensaje[i]==diccionario[j]){
-					 aux1=j;
+	int k = 0;
+	for(int  i = 0 ; i < strlen(mensaje) ; i++){	
+			for(int j = 0 ; j < strlen(diccionario); j++ ){
+				
+				if( mensaje[i] == diccionario[j] ){
+					
+					 aux1 = j;
 				}
-				if(clave[k%strlen(clave)]==diccionario[j]){
-					 aux2=j;
+				
+				if( clave[k % strlen(clave)] == diccionario[j] ){
+					
+					 aux2 = j;
 				}
 			}
-			if((aux1-aux2)<0){
-				aux3=26+(aux1-aux2);
+			if( (aux1 - aux2) < 0){
+				
+				aux3 = 26 + (aux1 - aux2);
 			}
 			else{
-				aux3=(aux1-aux2)%26;
+				aux3 = (aux1 - aux2) % 26;
 			}
-			mensaje[i]=diccionario[aux3];
-			k++;	
-		}				
+			mensaje[i] = diccionario[aux3];
+			k++;					
 	}
-	cout<<"El mensaje descifrado es:"<<mensaje<<endl<<endl;
+	cout<<"El mensaje descifrado es: "<<mensaje<<endl<<endl;
 }
 
 
