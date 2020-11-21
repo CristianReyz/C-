@@ -15,19 +15,23 @@ void cifrado_vigenere (){
 	fflush(stdin);
 	cout<<"Ingrese clave:";
 	cin.getline(clave,10);
-	//ci  = mi  + ki (mod 26), 0 = ci  = 25;
+
 	int k=0;
-	for(int i=0; i<strlen(mensaje);i++){
-			for(int j=0;j<strlen(diccionario);j++){
-				if(mensaje[i]==diccionario[j]){
-					 aux1=j;
+	for(int i = 0; i < strlen(mensaje); i++){
+		
+			for(int j = 0; j < strlen(diccionario); j++){
+
+				if(mensaje[i] == diccionario[j]){
+					
+					 aux1 = j;
 				}
-				if(clave[k%strlen(clave)]==diccionario[j]){
+				if(clave[ k % strlen(clave)] == diccionario[j]){
+					
 					 aux2=j;
 				}
 			}
-			aux3=(aux1+aux2)%26;
-			mensaje[i]=diccionario[aux3];
+			aux3 = (aux1 + aux2) % 27;
+			mensaje[i] = diccionario[aux3];
 			k++;					
 	}
 	cout<<"El mensaje cifrado es:"<<mensaje<<endl<<endl;
@@ -43,8 +47,7 @@ void descifrado_vigenere(){
 	fflush(stdin);
 	cout<<"Ingrese clave: ";
 	cin.getline(clave,100);
-	//Usar mi  = ci  - ki (mod 26), 0 = mi  = 25;
-
+	
 	int k = 0;
 	for(int  i = 0 ; i < strlen(mensaje) ; i++){	
 			for(int j = 0 ; j < strlen(diccionario); j++ ){
@@ -61,10 +64,10 @@ void descifrado_vigenere(){
 			}
 			if( (aux1 - aux2) < 0){
 				
-				aux3 = 26 + (aux1 - aux2);
+				aux3 = 27 + (aux1 - aux2);
 			}
 			else{
-				aux3 = (aux1 - aux2) % 26;
+				aux3 = (aux1 - aux2) % 27;
 			}
 			mensaje[i] = diccionario[aux3];
 			k++;					
