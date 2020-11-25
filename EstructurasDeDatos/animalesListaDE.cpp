@@ -1,14 +1,11 @@
-
-
+//practica
 #include <iostream>
 #include <stdlib.h>
 #include <string.h>
 #include <conio.h>
 using namespace std;
-
 const int arrayNombre = 20;
 const int arrayTipo = 15;
-
 struct Nodo{
 	char nombre[arrayNombre];
 	char tipo[arrayTipo];
@@ -16,7 +13,6 @@ struct Nodo{
 	Nodo *siguiente;
 	Nodo *anterior;	
 }*NodoInicio, *NodoNuevo, *NodoFinal;
-
 
 void Inicializar(){
 	NodoInicio = NULL;
@@ -81,14 +77,17 @@ void InsertarPosicion(char nombre[arrayNombre], char tipo[arrayTipo], int edad, 
 	NodoNuevo->siguiente->anterior = NodoNuevo;
 		
 }
+
 void EliminarInicio(){
 	NodoInicio = NodoInicio->siguiente;
 	NodoInicio->anterior = NULL;
 }
+
 void EliminarFinal(){
 	NodoFinal = NodoFinal->anterior;
 	NodoFinal->siguiente = NULL;
 }
+
 void EliminarPosicion(int p){
 	struct Nodo *NodoPosicion;
 	NodoPosicion = BuscarPosicion(p);
@@ -96,7 +95,6 @@ void EliminarPosicion(int p){
 	NodoPosicion->siguiente->anterior = NodoPosicion;
 	
 }
-
 
 void DesplegarInicioFinal(){
 	struct Nodo *NodoAuxiliar;
@@ -128,6 +126,7 @@ void DesplegarFinalInicio(){
 
 void MenuDesplegar(){
 	int opcion;
+	fflush(stdin);
 	do{
 		system("cls");
 		cout<<endl;cout<<"Menu de Despliegue"<<endl;
@@ -153,9 +152,9 @@ void MenuDesplegar(){
 	}while(opcion !=3);
 }
 
-
 void MenuEliminar(){
 	int opcion,posicion;
+	fflush(stdin);
 	do{
 		system("cls");
 		cout<<endl;cout<<"Menu de Eliminacion"<<endl;
@@ -205,6 +204,7 @@ void MenuEliminar(){
 			default:
 				cout<<"Error, Ingresa una opcion del menu"<<endl; cout<<endl;
 				getch();
+				break;
 		}
 	}while(opcion != 4);
 }
@@ -212,6 +212,7 @@ void MenuEliminar(){
 void MenuInsertar(){
 	int opcion,edad, posicion;
 	char nombre[arrayNombre], tipo[arrayTipo];
+	fflush(stdin);
 	do{
 		system("cls");
 		cout<<endl;cout<<"Menu de Insercion"<<endl;
@@ -279,16 +280,17 @@ void MenuInsertar(){
 				break;
 			default:
 				cout<<"Error, Ingresa una opcion del menu"<<endl; cout<<endl; getch();
+				break;
 		}
 	}while(opcion != 4);
 }
-
 void Salir(){
 	cout<<"Programa Finalizado"<<endl;
 }
 
 int main(){
 	int opcion;
+	fflush(stdin);
 	do{
 		system("cls");
 		cout<<endl;cout<<"Menu Principal"<<endl;
@@ -301,15 +303,12 @@ int main(){
 		switch(opcion){
 			case 1:
 				MenuInsertar();
-				getch();
 			case 2:
 				MenuEliminar();
-				getch();
 				break;
 			case 3:
 				if(NodoInicio != NULL){
 				MenuDesplegar();
-				getch();
 			}else{
 				cout<<"lista vacia"<<endl; cout<<endl;
 				getch();
@@ -322,6 +321,7 @@ int main(){
 				cout<<"Error, ingresa una opcion del menu"<<endl; getch();
 
 		}
-	}while(opcion != 4);	
+	}while(opcion != 4);
+	return 0;	
 }
 

@@ -8,13 +8,13 @@ char diccionario[]={'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o',
 void cifrado_vigenere (){
 	int aux1,aux2,aux3;
 	char mensaje[100];
-	char clave[10];
+	char clave[100];
 	fflush(stdin);
 	cout<<"Ingrese mensaje a cifrar:";
 	cin.getline(mensaje,100);
 	fflush(stdin);
 	cout<<"Ingrese clave:";
-	cin.getline(clave,10);
+	cin.getline(clave,100);
 
 	int k=0;
 	for(int i = 0; i < strlen(mensaje); i++){
@@ -40,7 +40,7 @@ void cifrado_vigenere (){
 void descifrado_vigenere(){
 	int aux1, aux2, aux3;
 	char mensaje[100];
-	char clave[10];
+	char clave[100];
 	fflush(stdin);
 	cout<<"Ingrese mensaje a descifrar: ";
 	cin.getline(mensaje,100);
