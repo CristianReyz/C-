@@ -44,7 +44,7 @@ void InsertarFinal(char fruta[arrayFruta]){
 
 void EliminarInicio(){
 	NodoLc->siguiente = NodoLc->siguiente->siguiente;
-	NodoLc->siguiente->siguiente->anterior = NodoLc;
+	NodoLc->siguiente->siguiente->anterior = NodoLc->siguiente;
 }
 
 
@@ -106,17 +106,20 @@ void DesplegarInicioFinal(){
 	struct Nodo *NodoAuxiliar;
 	NodoAuxiliar = NodoLc->siguiente;
 	int i = 1;
-	while(NodoAuxiliar != NodoLc->anterior->siguiente){
+	while(NodoAuxiliar != NodoLc){
 		cout<<endl;cout<<"Registro numero ["<< i <<"]"<<endl;
 		cout<<"\t ["<<NodoAuxiliar->fruta<<"]"<<endl; 
 		NodoAuxiliar = NodoAuxiliar->siguiente;
 		i++;
 	}
+	cout<<endl;cout<<"Registro numero ["<< i <<"]"<<endl;
+	cout<<"\t ["<<NodoLc->fruta<<"]"<<endl; 
 }
 
 void DesplegarFinalInicio(){
 	struct Nodo *NodoAuxiliar;
 	NodoAuxiliar = NodoLc;
+	
 	int i = 1;
 	while(NodoAuxiliar != NodoLc->siguiente){
 		cout<<endl;cout<<"Registro numero ["<< i <<"]"<<endl;
@@ -124,6 +127,8 @@ void DesplegarFinalInicio(){
 		NodoAuxiliar = NodoAuxiliar->anterior;
 		i++;
 	}
+	cout<<endl;cout<<"Registro numero ["<< i <<"]"<<endl;
+	cout<<"\t ["<<NodoLc->siguiente->fruta<<"]"<<endl;
 }
 
 void MenuDesplegar(){
@@ -160,8 +165,8 @@ void MenuEliminar(){
 		system("cls");
 		cout<<endl;cout<<"Menu de Eliminacion"<<endl;
 		cout<<"1.-Eliminar al Inicio"<<endl;
-		cout<<"3.-Eliminar al Final"<<endl;
-		cout<<"4.-Regresar al menu principal"<<endl;
+		cout<<"2.-Eliminar al Final"<<endl;
+		cout<<"3.-Regresar al menu principal"<<endl;
 		
 		cout<<"elige opcion"<<endl; cin>>opcion; cout<<endl;
 		switch(opcion){
