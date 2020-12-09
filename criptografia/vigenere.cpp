@@ -3,30 +3,26 @@
 #include<iostream>
 #include<string.h>
 using namespace std;
-char diccionario[]={'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',' '};
 
-void cifrado_vigenere (){
+char diccionario[]={'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',' '};
 	int aux1,aux2,aux3;
 	char mensaje[100];
-	char clave[100];
+	char clave[10];
+
+void cifrado_vigenere (){
 	fflush(stdin);
 	cout<<"Ingrese mensaje a cifrar:";
 	cin.getline(mensaje,100);
 	fflush(stdin);
 	cout<<"Ingrese clave:";
-	cin.getline(clave,100);
-
+	cin.getline(clave,10);
 	int k=0;
 	for(int i = 0; i < strlen(mensaje); i++){
-		
-			for(int j = 0; j < strlen(diccionario); j++){
-
+			for(int j = 0; j < 27; j++){
 				if(mensaje[i] == diccionario[j]){
-					
 					 aux1 = j;
 				}
 				if(clave[ k % strlen(clave)] == diccionario[j]){
-					
 					 aux2=j;
 				}
 			}
@@ -38,37 +34,24 @@ void cifrado_vigenere (){
 }
 
 void descifrado_vigenere(){
-	int aux1, aux2, aux3;
-	char mensaje[100];
-	char clave[100];
 	fflush(stdin);
 	cout<<"Ingrese mensaje a descifrar: ";
 	cin.getline(mensaje,100);
 	fflush(stdin);
 	cout<<"Ingrese clave: ";
-	cin.getline(clave,100);
+	cin.getline(clave,10);
 	
 	int k = 0;
 	for(int  i = 0 ; i < strlen(mensaje) ; i++){	
-			for(int j = 0 ; j < strlen(diccionario); j++ ){
-				
+			for(int j = 0 ; j < 27; j++ ){
 				if( mensaje[i] == diccionario[j] ){
-					
 					 aux1 = j;
 				}
-				
-				if( clave[k % strlen(clave)] == diccionario[j] ){
-					
+				if( clave[k % strlen(clave)] == diccionario[j] ){	
 					 aux2 = j;
 				}
 			}
-			if( (aux1 - aux2) < 0){
-				
-				aux3 = 27 + (aux1 - aux2);
-			}
-			else{
-				aux3 = (aux1 - aux2) % 27;
-			}
+			aux3 = (aux1 - aux2) % 27;
 			mensaje[i] = diccionario[aux3];
 			k++;					
 	}

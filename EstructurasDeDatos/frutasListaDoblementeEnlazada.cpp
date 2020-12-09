@@ -158,7 +158,6 @@ void MenuDesplegar(){
 	}while(opcion !=3);
 }
 
-
 void MenuEliminar(){
 	int opcion;
 	do{
