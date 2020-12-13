@@ -18,6 +18,7 @@ void cifrado_vigenere (){
 	cin.getline(clave,10);
 	int k=0;
 	for(int i = 0; i < strlen(mensaje); i++){
+		
 			for(int j = 0; j < 27; j++){
 				if(mensaje[i] == diccionario[j]){
 					 aux1 = j;

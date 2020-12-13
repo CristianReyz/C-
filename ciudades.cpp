@@ -1,10 +1,10 @@
 #include <iostream>
 #include <string.h>
+#include <cstring>
 using namespace std;
 
 const int cantidadVertices = 4;
 const int longitudCadena = 20; 
-
 
 struct Grafo{
 	char ciudad[cantidadVertices][longitudCadena];
@@ -16,16 +16,14 @@ void inicializar(){
 	for(int i = 0; i<cantidadVertices;i++){
 		grafo.vertices[i] = 0;
 		for(int j = 0; j<cantidadVertices; j++){
-			grafo.arcos[i][j] = 0;
+			grafo.arcos[i][j] = 0;  
 		}
 	}
 }
 
-void insertarVertice(int vertice, char ciudad[longitudCadena]){
+void insertarVertice(int vertice){
 	if(vertice >= 0 && vertice < cantidadVertices){
 		grafo.vertices[vertice] = 1;
-		strcpy(grafo.ciudad, ciudad);
-		//grafo.ciudad[vertice][longitudCadena] = ciudad[longitudCadena];
 	}
 }
 
@@ -77,6 +75,9 @@ void eliminarVertice(int v1){
 	vertice1 = buscarVertice(v1);
 	if(vertice1 != -1){
 		grafo.vertices[vertice1] = 0;
+		for(int i = 0; i<longitudCadena;i++){
+				grafo.ciudad[vertice1][i] = ' ';	
+		}
 		for(int i = 0; i<cantidadVertices; i++){
 			grafo.arcos[vertice1][i] = 0;
 			grafo.arcos[i][vertice1] = 0;
@@ -88,9 +89,12 @@ void eliminarVertice(int v1){
 }
 int main(){
 
-	int opcion,vertice,vertice2,kilometros;
-	char ciudad[longitudCadena];
-
+	int opcion,kilometros;
+	int vertice,vertice2;
+	char vertice1[longitudCadena], verticeAux[longitudCadena];
+	char ciudad[cantidadVertices][longitudCadena];
+	int posicion,posicion2;
+	int comparacion;
 	do{
 		cout<<"menu"<<endl;
 		cout<<"1.- insertar ciudad"<<endl;
@@ -102,40 +106,92 @@ int main(){
 		cout<<"ingresa una opcion: "<<endl; cin>>opcion;
 		switch(opcion){
 			case 1:
-				cout<<"ingresa la posicion del vertice"<<endl;
-				cin>>vertice;
-				cout<<"ingresa la ciudad"<<endl;
-				cin>>ciudad;
-				insertarVertice(vertice,ciudad);
+				int opcion,i;
+				i = 0;
+				do{
+					fflush(stdin);
+					cout<<"ingresa una ciudad"<<endl;
+					gets(grafo.ciudad[i]);
+					fflush(stdin);
+					insertarVertice(i);	
+					i++;
+					cout<<"Desea ingresar otra ciudad? 1/si 2/no"<<endl;
+					cin>>opcion;
+				}while(opcion !=2);
 				break;
 			case 2:
-				cout<<"ingresa primer vertice a unir"<<endl;
-				cin>>vertice;
-				cout<<"ingresa segundo vertice a unir"<<endl;
-				cin>>vertice2;
+				fflush(stdin);
+				cout<<"ingresa primer ciudad a unir"<<endl;
+				cin>>vertice1;
+				for(int i = 0;i<cantidadVertices;i++){
+					comparacion = strcmp(vertice1,grafo.ciudad[i]);
+					if(comparacion == 0){
+						posicion = i;
+						i=cantidadVertices;
+					}	
+				}
+			
+				fflush(stdin);
+				cout<<"ingresa segunda ciudad a unir"<<endl;
+				cin>>verticeAux;
+				for(int i = 0;i<cantidadVertices;i++){
+					comparacion = strcmp(verticeAux,grafo.ciudad[i]);
+					if(comparacion == 0){
+						posicion2 = i;
+						i=cantidadVertices;
+					}	
+				}
 				cout<<"ingresa la distancia en KM"<<endl;
 				cin>>kilometros;
-				insertarArco(vertice,vertice2,kilometros);
+				insertarArco(posicion,posicion2,kilometros);
 				break;
 			case 3:
-				cout<<"ingresa el vertice a eliminar"<<endl;
-				cin>>vertice;
-				eliminarVertice(vertice);
+				cout<<"ingresa ciudad a eliminar"<<endl;
+				cin>>vertice1;
+				for(int i = 0;i<cantidadVertices;i++){
+					comparacion = strcmp(vertice1,grafo.ciudad[i]);
+					if(comparacion == 0){
+						posicion = i;
+						i=cantidadVertices;
+						eliminarVertice(posicion);
+						fflush(stdin);
+					}	
+				}
 				break;
 			case 4:
-				cout<<"ingresa primer vertice del arco"<<endl;
-				cin>>vertice;
-				cout<<"ingresa segundo vertice del arco"<<endl;
-				cin>>vertice2;
-				eliminarArco(vertice,vertice2);
+								fflush(stdin);
+				cout<<"ingresa primer ciudad a desconectar"<<endl;
+				cin>>vertice1;
+				for(int i = 0;i<cantidadVertices;i++){
+					comparacion = strcmp(vertice1,grafo.ciudad[i]);
+					if(comparacion == 0){
+						posicion = i;
+						i=cantidadVertices;
+					}	
+				}
+			
+				fflush(stdin);
+				cout<<"ingresa segunda ciudad a desconectar"<<endl;
+				cin>>verticeAux;
+				for(int i = 0;i<cantidadVertices;i++){
+					comparacion = strcmp(verticeAux,grafo.ciudad[i]);
+					if(comparacion == 0){
+						posicion2 = i;
+						i=cantidadVertices;
+					}	
+				}
+				eliminarArco(posicion,posicion2);
 				break;
 			case 5:
 				cout<<"vertices"<<endl;
+				
+				fflush(stdin);
 				for(int i = 0; i<cantidadVertices; i++){
-					cout<<"["<<grafo.vertices[i]<<"] \t";
-					cout<<"["<<grafo.ciudad<<"]"<<endl;	
+					cout<<"["<<grafo.vertices[i]<<"] ";
+					puts(grafo.ciudad[i]);
 				}
 
+				cout<<endl;
 				cout<<"Arcos"<<endl;
 				for(int i = 0; i<cantidadVertices;i++){
 					for(int j = 0; j<cantidadVertices; j++){
