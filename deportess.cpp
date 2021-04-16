@@ -1429,7 +1429,7 @@ void menuPrincipal(){
 				break;
 			default: cout<<"Ingresa una opcion valida"<<endl; break;			
 		}
-	}while(opcion != 3);
+	} while (opcionValidada!=9 && opcionValidada!=-1);
 }										
 										
 												//MAIN
