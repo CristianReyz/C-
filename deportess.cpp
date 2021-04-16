@@ -1066,6 +1066,23 @@ void crearDirecto(){
     archivo=fopen("deportesDirecto.bin","wb");
     if (archivo==NULL)
         exit(1);
+
+    Alumno alumno;
+    int existe=0;
+    fread(&alumno, sizeof(alumno), 1, archivo);
+    while(!feof(archivo))
+    {
+        	for(int i = 0; i<=100; i++){
+				strcpy(alumno.codigo,"");
+	           	strcpy(alumno.nombre,"");
+	           	alumno.edad = 0;
+	           	alumno.estatura = 0.0;
+	           	alumno.peso = 0.0;
+	           	strcpy(alumno.domicilio,"");
+	           	alumno.deporte = 0;    	
+	           	fwrite(&alumno, sizeof(alumno), 1, archivo);
+	        }   	
+    }
     fclose(archivo);
     continuar();
 }
@@ -1281,6 +1298,11 @@ void eliminarDirecto(){
         printf("No existe un alumno con dicho codigo\n");
     fclose(archivo);
     continuar();
+}
+
+
+void menuOrdenacionDirecto(){
+
 }
 
 
