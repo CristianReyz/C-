@@ -1048,8 +1048,293 @@ void menuOrdenacion(){
         }
     } while (opcion!=6);
 }
-										
-void menuPrincipal(){
+	
+
+
+
+
+
+
+
+
+
+	//FUNCIONES PARA OPERAR ARCHIVO DIRECTO
+
+//crear archivo directo
+void crearDirecto(){
+    FILE *archivo;
+    archivo=fopen("deportesDirecto.bin","wb");
+    if (archivo==NULL)
+        exit(1);
+    fclose(archivo);
+    continuar();
+}
+
+
+//insertar en archivo secuencial desordenado
+void insertarDirecto(){
+    FILE *archivo;
+    char codigoSinValidar[arrayCodigo];
+    int banderaError = 0;
+	char edadSinValidar[arrayEdad];
+    archivo=fopen("deportesDirecto.bin","ab");
+    if (archivo==NULL)
+        exit(1);
+    Alumno nuevoAlumno;
+    do{
+    	fflush(stdin);
+		cout<<"CLAVE: "; 	
+		//se convierte de una vez a mayusculas el código sin validar para reducir el número de comparaciones sea como fuere que el usuario ingrese los datos
+		cin.getline(codigoSinValidar,arrayCodigo);	fflush(stdin);	strupr(codigoSinValidar);
+		//validando que de primera el codigo sin validar tenga la longitud correcta, de no ser así, se sale del ciclo y regresa sin guardar	
+		if(strlen(codigoSinValidar) != arrayCodigo-1){
+			cout<<"la longitud del codigo debe ser de "<<arrayCodigo-1<<endl;  getch();  fflush(stdin); system("cls"); banderaError = 1; break;
+		//validando la opcion en cada una de sus posiciones en la función que valída 	
+		}else if(validarCodigoAlumno(codigoSinValidar) == -1){
+			cout<<"Error de validacion"<<endl; banderaError = 1; break;
+		//en caso de pasar todas las pruebas se guarda	
+		}else{
+			fflush(stdin);	
+			strcpy(nuevoAlumno.codigo,codigoSinValidar);
+		}		
+		fflush(stdin);
+		cout<<"NOMBRE: ";	cin.getline(nuevoAlumno.nombre,arrayNombre);	fflush(stdin);		strupr(nuevoAlumno.nombre);
+		fflush(stdin);
+		cout<<"EDAD: ";		scanf("%s", &edadSinValidar); 
+		if(strlen(edadSinValidar) < arrayEdad){
+			cout<<"Edad invalida"<<endl; banderaError = 1; break;
+		}else if(validarEdad(edadSinValidar) == -1){
+			banderaError  = 1; break;	
+		}else{
+			nuevoAlumno.edad = validarEdad(edadSinValidar);
+		}
+		cout<<"ESTATURA: ";	scanf("%f",&nuevoAlumno.estatura);
+		cout<<"PESO: ";		scanf("%f",&nuevoAlumno.peso);
+		fflush(stdin);
+		cout<<"DOMICILIO: ";	cin.getline(nuevoAlumno.domicilio,arrayDomicilio); fflush(stdin);		strupr(nuevoAlumno.domicilio);
+		fflush(stdin);
+		//break porque si no se repite infinitamente jaja
+		cout<<"ID DEPORTE: ";	scanf("%i",&nuevoAlumno.deporte);	break;
+		fflush(stdin);
+	}while(banderaError != 1);
+	//en caso de que no se haya pasado alguna prueba, no se guarda el registro en el archivo
+	//sin esta validación el registro se guarda con espacios vacíos
+	if(banderaError != 1){
+	    fwrite(&nuevoAlumno, sizeof(nuevoAlumno), 1, archivo);
+    	fclose(archivo);	
+	}
+    continuar();
+}
+
+
+//consulta general de archivo secuencial desordenado
+void consultaGeneralDirecto(){
+    FILE *archivo;
+    archivo=fopen("deportesDirecto.bin","rb");
+    if (archivo==NULL)
+        exit(1);
+	int r = 3;
+    Alumno alumno;
+    fread(&alumno, sizeof(alumno), 1, archivo);
+    pintarCampos();
+    while(!feof(archivo))
+    {
+    	escribirRegistros(alumno,r);
+    	r+=2;
+        fread(&alumno, sizeof(alumno), 1, archivo);
+    }
+    	coordenadas(0, r-1);
+		pintar(2);
+    fclose(archivo);
+    continuar();
+}
+
+//consultar por codigo en archivo secuencial desordenado
+void consultarIDDirecto(){
+	int r = 3;
+    FILE *archivo;
+    archivo=fopen("deportesDirecto.bin","rb");
+    if (archivo==NULL)
+        exit(1);
+    printf("Ingrese el codigo del alumno a consultar:");
+    char codigo[arrayCodigo];
+    fflush(stdin);
+    cin.getline(codigo,arrayCodigo); fflush(stdin); strupr(codigo);
+    system("cls");
+    Alumno alumno;
+    int existe=0;
+    fread(&alumno, sizeof(alumno), 1, archivo);
+    while(!feof(archivo))
+    {
+        if (strcmp(codigo,alumno.codigo)==0)
+        {
+            pintarCampos();
+            escribirRegistros(alumno,r);
+    		r+=2;
+           	existe=1;
+           	break;
+        }
+        fread(&alumno, sizeof(alumno), 1, archivo);
+    }
+    if(existe == 1){
+    	coordenadas(0, r-1);
+		pintar(2);	
+	}
+    if (existe==0)
+        printf("No existe un alumno con dicho codigo\n");
+    fclose(archivo);
+    continuar();
+}
+
+//modificar por codigo en archivo secuencial desordenado
+void modificarDirecto(){
+	int r = 3;
+    FILE *archivo;
+    archivo=fopen("deportesDirecto.bin","r+b");
+    if (archivo==NULL)
+        exit(1);
+    printf("Ingrese el codigo del alumno a modificar:");
+    char codigo[arrayCodigo]; fflush(stdin);	cin.getline(codigo,arrayCodigo); fflush(stdin); strupr(codigo);
+    system("cls");
+    Alumno alumno;
+    int existe=0;
+    fread(&alumno, sizeof(alumno), 1, archivo);
+    while(!feof(archivo))
+    {
+        if (strcmp(codigo,alumno.codigo)==0)
+        {
+        	pintarCampos();
+            escribirRegistros(alumno,r);
+    		r+=2;
+          	cout<<"Ingresa nuevo nombre: "<<endl; fflush(stdin); cin.getline(alumno.nombre,arrayNombre); fflush(stdin); strupr(alumno.nombre);
+          	fflush(stdin);
+          	cout<<"Ingresa nueva edad: "<<endl; fflush(stdin); cin>>alumno.edad;
+          	cout<<"Ingresa nueva estatura: "<<endl; fflush(stdin); cin>>alumno.estatura;
+          	cout<<"Ingresa nuevo peso: "<<endl; fflush(stdin); cin>>alumno.peso;
+          	fflush(stdin);
+          	cout<<"Ingresa nuevo domicilio: "<<endl; fflush(stdin); cin.getline(alumno.domicilio,arrayDomicilio); fflush(stdin); strupr(alumno.domicilio);
+          	fflush(stdin);
+          	cout<<"Ingresa nuevo id del deporte: "<<endl; fflush(stdin); cin>>alumno.deporte;
+        	int posicion=ftell(archivo)-sizeof(alumno);
+           	fseek(archivo,posicion,SEEK_SET);
+           	fwrite(&alumno, sizeof(alumno), 1, archivo);
+           	printf("Se modifico el nombre del alumno.\n");
+           	existe=1;
+           	break;
+        }
+        fread(&alumno, sizeof(alumno), 1, archivo);
+    }
+    if(existe == 1){
+    	coordenadas(0, r-1);
+		pintar(2);	
+	}
+    if (existe==0)
+        printf("No existe un alumno con dicho codigo\n");
+    fclose(archivo);
+    continuar();
+}
+
+void eliminarDirecto(){
+	int r = 3;
+    FILE *archivo;
+    archivo=fopen("deportesDirecto.bin","r+b");
+    if (archivo==NULL)
+        exit(1);
+    printf("Ingrese el codigo del alumno a modificar:");
+    char codigo[arrayCodigo]; fflush(stdin);	cin.getline(codigo,arrayCodigo); fflush(stdin); strupr(codigo);
+    system("cls");
+    Alumno alumno;
+    int existe=0;
+    fread(&alumno, sizeof(alumno), 1, archivo);
+    while(!feof(archivo))
+    {
+        if (strcmp(codigo,alumno.codigo)==0)
+        {
+        	int opcion;
+        	pintarCampos();
+            escribirRegistros(alumno,r);
+    		r+=2;
+	    	cout<<"eliminando alumno..."<<endl;
+	    	getch();	    	
+			strcpy(alumno.codigo,"");
+           	strcpy(alumno.nombre,"");
+           	alumno.edad = 0;
+           	alumno.estatura = 0.0;
+           	alumno.peso = 0.0;
+           	strcpy(alumno.domicilio,"");
+           	alumno.deporte = 0;
+           	
+           	int posicion=ftell(archivo)-sizeof(alumno);
+           	fseek(archivo,posicion,SEEK_SET);
+           	fwrite(&alumno, sizeof(alumno), 1, archivo);
+           	printf("Se elimino el alumno.\n");
+           	existe=1;
+           	break;
+        }
+        fread(&alumno, sizeof(alumno), 1, archivo);
+    }
+    if(existe == 1){
+    	coordenadas(0, r-1);
+		pintar(2);	
+	}
+    if (existe==0)
+        printf("No existe un alumno con dicho codigo\n");
+    fclose(archivo);
+    continuar();
+}
+
+
+
+void menuDirecto(){
+	int opcionValidada;
+    char opcionSinValidar[arrayOpcion];
+    do {
+    	system("cls");
+    	cout<<" \t \t \t MENU DE ARCHIVO DIRECTO"<<endl;
+        printf("1 - Crear un archivo binario llamado \"deportesDirecto.bin\"\n");
+        printf("2 - Insertar nuevo alumno\n");
+        printf("3 - Consulta general.\n");
+        printf("4 - Consulta de un alumno por su codigo.\n");
+        printf("5 - Modificar el nombre de un alumno. \n");
+        printf("6 - Eliminar logicamente alumno por codigo. \n");
+        printf("7 - Ordenar \n");
+        printf("8 - Administrar deportes\n");
+        printf("9 - Salir \n\n");
+        printf("Ingrese su opcion:");
+        scanf("%s",&opcionSinValidar);
+        //validando opcion
+        opcionValidada = validarOpcion(opcionSinValidar);
+        //según valor de la opción ya validada, hacer:
+        switch (opcionValidada) {
+            case 1:crearDirecto();
+                   break;
+            case 2:system("cls");insertarDirecto();
+                   break;
+            case 3:system("cls");consultaGeneralDirecto();
+                   break;
+            case 4:system("cls");consultarIDDirecto();
+                   break;
+            case 5:system("cls");modificarDirecto();
+                   break;
+            case 6:system("cls");eliminarDirecto();
+					break;       		
+			case 7:system("cls"); menuOrdenacionDirecto();
+					break;
+			case 8:system("cls"); menuDeportes();
+					break;	
+			case 9:system("cls"); continuar();
+					break;			
+			case -1: cout<<"error de validacion"<<endl;	
+					break;	
+			default: cout<<"ingresa una opcion valida"<<endl;
+					break;	
+        }
+    } while (opcionValidada!=9 && opcionValidada!=-1);
+}
+
+
+
+void menuArchivoDesordenado(){
 	 int opcionValidada;
     char opcionSinValidar[arrayOpcion];
     do {
@@ -1093,6 +1378,30 @@ void menuPrincipal(){
 					break;	
         }
     } while (opcionValidada!=9 && opcionValidada!=-1);
+}
+
+
+
+
+
+
+void menuPrincipal(){
+	int opcion;
+	do{
+		cout<<"1.- Menu de archivo secuencial-ordenado"<<endl;
+		cout<<"2.- Menu de archivo directo"<<endl;
+		switch(opcion){
+			case 1:
+				menuArchivoDesordenado();
+				break;
+			case 2:
+				menuDirecto();
+				break;
+			case 3:
+				break;
+			default: cout<<"Ingresa una opcion valida"<<endl; break;			
+		}
+	}while(opcion != 3);
 }										
 										
 												//MAIN
