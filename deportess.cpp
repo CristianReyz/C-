@@ -1408,11 +1408,17 @@ void menuArchivoDesordenado(){
 
 
 void menuPrincipal(){
-	int opcion;
+		 int opcionValidada;
+    char opcionSinValidar[arrayOpcion];
 	do{
 		cout<<"1.- Menu de archivo secuencial-ordenado"<<endl;
 		cout<<"2.- Menu de archivo directo"<<endl;
-		switch(opcion){
+		 printf("Ingrese su opcion:");
+        scanf("%s",&opcionSinValidar);
+        //validando opcion
+        opcionValidada = validarOpcion(opcionSinValidar);
+        //según valor de la opción ya validada, hacer:
+        switch (opcionValidada) {
 			case 1:
 				menuArchivoDesordenado();
 				break;
